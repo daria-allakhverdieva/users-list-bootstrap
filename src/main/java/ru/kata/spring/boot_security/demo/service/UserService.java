@@ -12,5 +12,5 @@ public interface UserService {
     Optional<User> findUserById(int id);
     void saveUser(User user);
     void deleteUserById(int id);
-    void updateUser(int id, String newUsername, String password, Collection<Role> roles);
+    void updateUser(int id, String newUsername, int age, String password, Collection<Role> roles);
 }

@@ -34,6 +34,7 @@ public class UserInitializer implements ApplicationRunner {
                 .orElseGet(() -> {
                     User admin = new User();
                     admin.setUsername("admin");
+                    admin.setAge(25);
                     admin.setPassword("admin");
                     admin.setRoles(Collections.singleton(roleAdmin));
                     userServiceImpl.saveUser(admin);
@@ -44,6 +45,7 @@ public class UserInitializer implements ApplicationRunner {
                 .orElseGet(() -> {
                     User user = new User();
                     user.setUsername("user");
+                    user.setAge(30);
                     user.setPassword("user");
                     user.setRoles(Collections.singleton(roleUser));
                     userServiceImpl.saveUser(user);

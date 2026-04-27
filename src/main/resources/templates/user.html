@@ -3,20 +3,80 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/user.css">
     <title>User Profile</title>
 </head>
 <body>
-    <h2>User Profile</h2>
-    <div>
-        <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
-        <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
-        <p><strong>Roles:</strong>
-            <span th:each="role, iter : ${user.roles}"
-                  th:text="${role.name + (iter.last ? '' : ', ')}">Role</span>
+
+<nav class="navbar">
+    <div class="container">
+    <span class="navbar-text me-auto">
+      <strong th:text="${user.username}"></strong>
+      <span class="ms-1" th:text="' with roles: ' + ${user.rolesAsString}"></span>
+    </span>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="sidebar-fixed col-3">
+    <div class="card-body">
+        <ul class="list-group mt-3" th:if="${isAdmin}">
+            <li class="list-group-item"
+                th:each="user : ${users}"
+                th:classappend="${user.id == currentUserId ? 'sidebar-user-active' : ''}">
+                <a th:href="@{/admin/user(id=${user.id})}"
+                   class="text-decoration-none"
+                   th:classappend="${user.id == currentUserId ? 'text-white' : 'text-dark'}">
+                    <span th:text="${user.username}"></span>
+                </a>
+            </li>
+        </ul>
+
+        <p class="card-text py-2 px-3 mb-0" th:unless="${isAdmin}">
+            <span th:text="${user.username}"></span>
         </p>
     </div>
-<form th:action="@{/logout}" method="post" style="display: inline; margin-left: 15px;">
-    <button type="submit">Log Out</button>
-</form>
+</div>
+
+<div class="main-content">
+    <h1 class="mb-4">User information-page</h1>
+
+    <div class="card">
+        <div class="card-header">
+            About user
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.age}"></td>
+                    <td>
+                    <span th:each="role, iter : ${user.roles}"
+                          th:text="${role.name + (iter.last ? '' : ', ')}">Role</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

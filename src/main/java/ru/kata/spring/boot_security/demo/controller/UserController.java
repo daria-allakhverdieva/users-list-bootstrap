@@ -5,10 +5,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
-
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,9 +22,16 @@ public class UserController {
 
     @GetMapping("/user")
     public String getUsersPage(Model model, Authentication auth) {
+        List<User> users = userServiceImpl.findAll();
         Optional<User> userOptional = userServiceImpl.findByUsername(auth.getName());
         if (userOptional.isPresent()) {
-            model.addAttribute("user", userOptional.get());
+            User user = userOptional.get();
+            model.addAttribute("rolesAsString", user.getRolesAsString());
+            model.addAttribute("user", user);
+            model.addAttribute("users", users);
+            boolean isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().contains("ADMIN"));
+            model.addAttribute("isAdmin", isAdmin);
             return "user";
         } else {
             return "redirect:/login";

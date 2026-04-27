@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return userRepository.findAll();
     }
 
     @Transactional(readOnly = true)
@@ -53,11 +53,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void updateUser(int id, String newUsername, String password, Collection<Role> roles) {
+    public void updateUser(int id, String newUsername, int age, String password, Collection<Role> roles) {
         userRepository
                 .findById(id)
                 .ifPresent(user -> {
                     user.setUsername(newUsername);
+                    user.setAge(age);
                     if (password != null && !password.isEmpty()) {
                         user.setPassword(passwordEncoder.encode(password));
                     }
