@@ -28,17 +28,17 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**").permitAll()
-                        .requestMatchers("/admin/**", "/index").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/api/admin/**", "/index").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .successHandler((request, response, authentication) -> {
                             String redirectUrl = authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().contains("ROLE_ADMIN"))
-                                    ? "/admin"
-                                    : "/user";
+                                    ? "api/admin/users"
+                                    : "api/users";
                             response.sendRedirect(redirectUrl);
                         })
                 )

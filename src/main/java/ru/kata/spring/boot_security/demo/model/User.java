@@ -50,6 +50,14 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public User(int id, String username, int age, String password, Collection<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.age = age;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public int getId() {
         return id;
     }
