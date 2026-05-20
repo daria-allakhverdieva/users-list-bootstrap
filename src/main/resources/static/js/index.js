@@ -190,6 +190,11 @@ async function addUser(formData) {
         if (response.ok) {
             showAlert('Пользователь успешно создан');
             await refreshUI();
+            const tabTrigger = document.getElementById('nav-home-tab');
+            if (tabTrigger) {
+                const tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+            }
         } else {
             const errorData = await response.json();
             showAlert('Ошибка: ' + (errorData.message || 'Неизвестная ошибка'));
