@@ -1,3 +1,4 @@
+
 const API = {
     currentUser: '/api/users',
     allUsers: '/api/admin/users',
@@ -115,6 +116,7 @@ function renderUserTable(user) {
     `;
 }
 
+// ====== Сайдбар для админа ======
 function renderSidebarForAdmin(users) {
     const sidebarList = document.getElementById('sidebarUserList');
     sidebarList.innerHTML = users.map(user => {
@@ -122,7 +124,7 @@ function renderSidebarForAdmin(users) {
         const textClass = (user.id === currentUserId) ? 'text-white' : 'text-dark';
         return `
             <li class="list-group-item ${activeClass}" style="cursor: pointer;">
-                <span class="text-decoration-none ${textClass} sidebar-link" data-id="${user.id}" style="display:block; width:100%;">
+                <span class="text-decoration-none ${textClass} sidebar-link" data-id="${user.id}" style="display:block; width:100%; cursor:pointer;">
                     ${user.username}
                 </span>
             </li>
@@ -136,9 +138,6 @@ function renderSidebarForAdmin(users) {
 async function sidebarClickHandler(e) {
     const link = e.target.closest('.sidebar-link');
     if (!link) return;
-
-    e.preventDefault();
-    e.stopPropagation();
 
     const userId = parseInt(link.dataset.id);
     if (isNaN(userId)) return;
@@ -165,12 +164,7 @@ async function switchToUser(userId) {
 
         updateUserInfo(user);
         renderUserTable(user);
-
         currentUserId = userId;
-
-        if (!allUsersList || allUsersList.length === 0) {
-            await loadAllUsers();
-        }
 
         renderSidebarForAdmin(allUsersList);
 
@@ -179,6 +173,7 @@ async function switchToUser(userId) {
     }
 }
 
+// ====== Сайдбар для обычного пользователя ======
 function renderSidebarForUser(user) {
     const sidebarList = document.getElementById('sidebarUserList');
     sidebarList.innerHTML = `
